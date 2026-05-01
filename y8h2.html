@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y8 Hex L1 — Intro to Hexadecimal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y8h1';
+const SLIDES = [{"type": "intro", "title": "From Binary to Hexadecimal", "body": "<p>In Year 7 you mastered binary — the base-2 number system computers use internally. This year we introduce <strong>hexadecimal</strong> (base 16) — a compact shorthand for binary that programmers use every day.</p>\n<div class=\"callout\">💡 Hexadecimal is not a different way of storing data. It is just a <strong>human-friendly way to write binary</strong> — much shorter and easier to read.</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Quick binary recap</h4><ul><li>Base 2 — only 0 and 1</li><li>Place values: 1, 2, 4, 8, 16, 32, 64, 128</li><li>8 bits = 1 byte = values 0–255</li></ul></div>\n<div class=\"card\"><h4>Why hexadecimal?</h4><ul><li>8 binary digits → only 2 hex digits</li><li>Much less error-prone for humans to read</li><li>One hex digit = exactly 4 binary bits</li></ul></div>\n</div>"}, {"type": "concept", "title": "What is Hexadecimal?", "body": "<p>Hexadecimal is <strong>base 16</strong>. It needs 16 different symbols. After 9 it uses letters:</p>\n<table class=\"bit-table\"><tr><th>Denary</th><th>Hex</th><th>Binary</th><th>Denary</th><th>Hex</th><th>Binary</th></tr>\n<tr><td>0</td><td>0</td><td>0000</td><td>8</td><td>8</td><td>1000</td></tr>\n<tr><td>1</td><td>1</td><td>0001</td><td>9</td><td>9</td><td>1001</td></tr>\n<tr><td>2</td><td>2</td><td>0010</td><td>10</td><td class=\"bit-hi\">A</td><td>1010</td></tr>\n<tr><td>3</td><td>3</td><td>0011</td><td>11</td><td class=\"bit-hi\">B</td><td>1011</td></tr>\n<tr><td>4</td><td>4</td><td>0100</td><td>12</td><td class=\"bit-hi\">C</td><td>1100</td></tr>\n<tr><td>5</td><td>5</td><td>0101</td><td>13</td><td class=\"bit-hi\">D</td><td>1101</td></tr>\n<tr><td>6</td><td>6</td><td>0110</td><td>14</td><td class=\"bit-hi\">E</td><td>1110</td></tr>\n<tr><td>7</td><td>7</td><td>0111</td><td>15</td><td class=\"bit-hi\">F</td><td>1111</td></tr></table>\n<div class=\"callout warn\">⚠️ A = 10, B = 11, C = 12, D = 13, E = 14, F = 15. Must memorise these!</div>"}, {"type": "concept", "title": "Why One Hex Digit = 4 Binary Bits", "body": "<p>Hexadecimal goes from 0 to 15. In binary, 4 bits also gives us exactly 0 to 15 (2⁴ = 16 values).</p>\n<div class=\"callout\">This is <strong>not a coincidence</strong> — hexadecimal was designed specifically so that one hex digit maps to exactly one nibble (4 bits).</div>\n<p>An 8-bit byte = two nibbles = <strong>exactly 2 hex digits</strong></p>\n<table class=\"bit-table\"><tr><th>8-bit binary</th><th>Split into nibbles</th><th>Hex</th></tr>\n<tr><td>11001010</td><td>1100 | 1010</td><td>C A = CA</td></tr>\n<tr><td>00101111</td><td>0010 | 1111</td><td>2 F = 2F</td></tr>\n<tr><td>11111111</td><td>1111 | 1111</td><td>F F = FF</td></tr>\n<tr><td>00000000</td><td>0000 | 0000</td><td>0 0 = 00</td></tr></table>"}, {"type": "concept", "title": "Binary to Hex — Method", "body": "<p>Convert <strong>10110101</strong> to hexadecimal:</p>\n<p><strong>Step 1:</strong> Split into two nibbles: <code>1011</code> | <code>0101</code></p>\n<p><strong>Step 2:</strong> Convert each nibble separately:</p>\n<table class=\"bit-table\"><tr><th>Nibble</th><th>Binary</th><th>Denary</th><th>Hex</th></tr>\n<tr><td>Left</td><td>1011</td><td>8+2+1=11</td><td class=\"bit-hi\">B</td></tr>\n<tr><td>Right</td><td>0101</td><td>4+1=5</td><td class=\"bit-hi\">5</td></tr></table>\n<div class=\"callout success\">✓ 10110101 in binary = B5 in hexadecimal</div>\n<p>Always write the <strong>left nibble first</strong>. Result: <code>B5</code></p>"}, {"type": "concept", "title": "Hex to Binary — Method", "body": "<p>Convert <strong>3F</strong> from hexadecimal to binary:</p>\n<p><strong>Step 1:</strong> Convert each digit to a 4-bit nibble:</p>\n<table class=\"bit-table\"><tr><th>Hex digit</th><th>Denary</th><th>4-bit binary</th></tr>\n<tr><td>3</td><td>3</td><td>0011</td></tr>\n<tr><td>F</td><td>15</td><td>1111</td></tr></table>\n<p><strong>Step 2:</strong> Join the nibbles: <code>0011</code> + <code>1111</code> = <code>00111111</code></p>\n<div class=\"callout success\">✓ 3F hex = 00111111 binary = 63 denary</div>\n<div class=\"callout warn\">⚠️ Always write each nibble as exactly 4 bits — pad with leading zeros if needed. 3 = 0011 not 11.</div>"}, {"type": "activity", "title": "Guided Tasks — Hex Introduction", "body": "<div class=\"task-box\"><h4>📝 Hexadecimal basics</h4><div class=\"answer-row\"><label>1. What denary value does hex A represent?</label><input class=\"ans-input\" id=\"h1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h1\" data-fb=\"fh1\" data-ans=\"10|ten\">Check</button><span class=\"fb\" id=\"fh1\"></span></div><div class=\"answer-row\"><label>2. What denary value does hex F represent?</label><input class=\"ans-input\" id=\"h2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h2\" data-fb=\"fh2\" data-ans=\"15|fifteen\">Check</button><span class=\"fb\" id=\"fh2\"></span></div><div class=\"answer-row\"><label>3. How many binary bits does one hex digit represent?</label><input class=\"ans-input\" id=\"h3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h3\" data-fb=\"fh3\" data-ans=\"4|four\">Check</button><span class=\"fb\" id=\"fh3\"></span></div><div class=\"answer-row\"><label>4. Convert binary 1111 to hex:</label><input class=\"ans-input\" id=\"h4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h4\" data-fb=\"fh4\" data-ans=\"F|f\">Check</button><span class=\"fb\" id=\"fh4\"></span></div><div class=\"answer-row\"><label>5. Convert binary 1010 to hex:</label><input class=\"ans-input\" id=\"h5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h5\" data-fb=\"fh5\" data-ans=\"A|a|10\">Check</button><span class=\"fb\" id=\"fh5\"></span></div><div class=\"answer-row\"><label>6. Convert binary 11001100 to hex:</label><input class=\"ans-input\" id=\"h6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h6\" data-fb=\"fh6\" data-ans=\"CC|cc\">Check</button><span class=\"fb\" id=\"fh6\"></span></div><div class=\"answer-row\"><label>7. Convert hex 2F to binary:</label><input class=\"ans-input\" id=\"h7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h7\" data-fb=\"fh7\" data-ans=\"00101111\">Check</button><span class=\"fb\" id=\"fh7\"></span></div><div class=\"answer-row\"><label>8. What is hex FF in denary?</label><input class=\"ans-input\" id=\"h8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"h8\" data-fb=\"fh8\" data-ans=\"255\">Check</button><span class=\"fb\" id=\"fh8\"></span></div></div>"}, {"type": "summary", "title": "Lesson 1 Summary", "body": "<ul>\n<li>Hexadecimal is base 16 — digits 0–9 then A(10), B(11), C(12), D(13), E(14), F(15)</li>\n<li>One hex digit represents exactly <strong>4 binary bits</strong> (a nibble)</li>\n<li>Two hex digits represent exactly <strong>8 binary bits</strong> (a byte)</li>\n<li>Binary → Hex: split into nibbles of 4, convert each to hex</li>\n<li>Hex → Binary: convert each digit to its 4-bit equivalent, join</li>\n<li>FF hex = 11111111 binary = 255 denary</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: hex to and from denary.</div>"}, {"type": "compete", "title": "🏆 Hex Introduction Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Hex Introduction Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "What denary value is hex A?", "answers": ["10"]}, {"q": "What denary value is hex F?", "answers": ["15"]}, {"q": "What denary value is hex C?", "answers": ["12"]}, {"q": "One hex digit = how many bits?", "answers": ["4", "four"]}, {"q": "Convert binary 0000 to hex", "answers": ["0"]}, {"q": "Convert binary 1111 to hex", "answers": ["F", "f"]}, {"q": "Convert binary 1010 to hex", "answers": ["A", "a"]}, {"q": "Convert hex FF to binary", "answers": ["11111111"]}, {"q": "Convert binary 11001100 to hex", "answers": ["CC", "cc"]}, {"q": "How many hex digits in a byte?", "answers": ["2", "two"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

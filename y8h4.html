@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y8 Hex L3 — Colour Codes</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y8h3';
+const SLIDES = [{"type": "intro", "title": "Hexadecimal Colour Codes", "body": "<p>You see hexadecimal every time you work with colour on a computer. Web colours, graphics editors and CSS all use <strong>6-digit hex codes</strong> to describe colours precisely.</p>\n<div class=\"callout\">🎨 A hex colour like <span style=\"color:#e8c84e\"><strong>#FF8800</strong></span> is made of three 2-digit hex numbers — one each for <strong>Red</strong>, <strong>Green</strong> and <strong>Blue</strong>.</div>\n<div class=\"three-col\">\n<div class=\"card\" style=\"border-color:#e07060\"><h4 style=\"color:#e07060\">Red (RR)</h4><p>First two hex digits<br>00 = no red<br>FF = maximum red</p></div>\n<div class=\"card\" style=\"border-color:#6ec87a\"><h4 style=\"color:#6ec87a\">Green (GG)</h4><p>Middle two hex digits<br>00 = no green<br>FF = maximum green</p></div>\n<div class=\"card\" style=\"border-color:#6ea8c8\"><h4 style=\"color:#6ea8c8\">Blue (BB)</h4><p>Last two hex digits<br>00 = no blue<br>FF = maximum blue</p></div>\n</div>"}, {"type": "concept", "title": "Reading Hex Colour Codes", "body": "<p>Format: <code>#RRGGBB</code> — each pair is a hex value from 00 (0) to FF (255)</p>\n<table class=\"bit-table\"><tr><th>Hex Code</th><th>Red</th><th>Green</th><th>Blue</th><th>Colour</th></tr>\n<tr><td>#FF0000</td><td>255</td><td>0</td><td>0</td><td>Pure Red</td></tr>\n<tr><td>#00FF00</td><td>0</td><td>255</td><td>0</td><td>Pure Green</td></tr>\n<tr><td>#0000FF</td><td>0</td><td>0</td><td>255</td><td>Pure Blue</td></tr>\n<tr><td>#FFFFFF</td><td>255</td><td>255</td><td>255</td><td>White</td></tr>\n<tr><td>#000000</td><td>0</td><td>0</td><td>0</td><td>Black</td></tr>\n<tr><td>#FFFF00</td><td>255</td><td>255</td><td>0</td><td>Yellow</td></tr>\n<tr><td>#FF8800</td><td>255</td><td>136</td><td>0</td><td>Orange</td></tr></table>"}, {"type": "concept", "title": "Why Hex for Colours?", "body": "<p>Each colour channel is 8 bits (0–255). Writing this in binary would be 24 bits:</p>\n<pre>Red=255, Green=128, Blue=0\nBinary: 11111111 10000000 00000000  (24 digits!)\nHex:    FF       80       00        (6 digits ✓)</pre>\n<div class=\"callout\">💡 Hex colour codes are <strong>4× shorter</strong> than binary — much easier for web designers and artists to work with.</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Total possible colours</h4><p>256 × 256 × 256 = <strong>16,777,216</strong> different colours possible in 24-bit RGB.</p></div>\n<div class=\"card\"><h4>How many hex codes?</h4><p>FF FF FF → F×16+F = 255 for each channel. So #000000 to #FFFFFF = 16,777,216 codes.</p></div>\n</div>"}, {"type": "concept", "title": "Mixing Colours with Hex", "body": "<p>Understanding hex lets you predict and control colours:</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Increasing one channel</h4><p>Raise one pair while keeping others at 00 or FF.<br>#880000 = dark red (half intensity)<br>#FF8800 = orange (red+half green)</p></div>\n<div class=\"card\"><h4>Equal channels</h4><p>When R=G=B, you get a shade of grey.<br>#808080 = mid grey<br>#404040 = dark grey</p></div>\n</div>\n<table class=\"bit-table\"><tr><th>Hex Code</th><th>R</th><th>G</th><th>B</th><th>Result</th></tr>\n<tr><td>#FF00FF</td><td>255</td><td>0</td><td>255</td><td>Magenta/Purple</td></tr>\n<tr><td>#00FFFF</td><td>0</td><td>255</td><td>255</td><td>Cyan</td></tr>\n<tr><td>#808080</td><td>128</td><td>128</td><td>128</td><td>Mid grey</td></tr>\n<tr><td>#C8E06E</td><td>200</td><td>224</td><td>110</td><td>Olive green</td></tr></table>"}, {"type": "concept", "title": "Other Real-World Uses of Hex", "body": "<div class=\"three-col\">\n<div class=\"card\"><h4>Memory addresses</h4><p>Computer memory locations are shown in hex. e.g. the code at address <code>0x004B2A</code>. Much shorter than the binary equivalent.</p></div>\n<div class=\"card\"><h4>Error codes</h4><p>Windows Blue Screen error codes are hex: <code>0x0000007E</code>. MAC addresses on network cards use hex pairs.</p></div>\n<div class=\"card\"><h4>Debugging</h4><p>Programmers inspect memory as hex 'dumps' — rows of hex values showing exactly what's stored.</p></div>\n</div>\n<div class=\"callout\">💻 MAC addresses (like <code>A4:C3:F0:28:B1:7D</code>) are 6 pairs of hex digits = 48 bits = a unique identifier for every network device.</p></div>"}, {"type": "concept", "title": "Hex in CSS and Web Design", "body": "<p>As a computer scientist, you'll write hex colour codes when creating websites:</p>\n<pre>/* CSS examples */\nbody {\n  background-color: #2d3318;   /* dark olive green */\n  color: #f0f2e0;              /* light cream text */\n  border: 1px solid #5a6632;  /* medium olive border */\n}</pre>\n<div class=\"two-col\">\n<div class=\"card\"><h4>3-digit shorthand</h4><p>When both hex digits in a pair are the same, you can shorten: <code>#FF8800</code> = <code>#F80</code>. Browser doubles each digit.</p></div>\n<div class=\"card\"><h4>Opacity — RGBA</h4><p>A fourth byte for transparency: <code>#FF880088</code> — the last 88 means 50% opacity.</p></div>\n</div>"}, {"type": "activity", "title": "Guided Tasks — Hex Colours", "body": "<div class=\"task-box\"><h4>📝 Hex colour questions</h4><div class=\"answer-row\"><label>1. What colour does #FF0000 produce?</label><input class=\"ans-input\" id=\"c1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c1\" data-fb=\"fc1\" data-ans=\"red|pure red\">Check</button><span class=\"fb\" id=\"fc1\"></span></div><div class=\"answer-row\"><label>2. What colour does #FFFFFF produce?</label><input class=\"ans-input\" id=\"c2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c2\" data-fb=\"fc2\" data-ans=\"white\">Check</button><span class=\"fb\" id=\"fc2\"></span></div><div class=\"answer-row\"><label>3. What colour does #000000 produce?</label><input class=\"ans-input\" id=\"c3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c3\" data-fb=\"fc3\" data-ans=\"black\">Check</button><span class=\"fb\" id=\"fc3\"></span></div><div class=\"answer-row\"><label>4. In #FF8800, what is the Red value in denary?</label><input class=\"ans-input\" id=\"c4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c4\" data-fb=\"fc4\" data-ans=\"255\">Check</button><span class=\"fb\" id=\"fc4\"></span></div><div class=\"answer-row\"><label>5. In #FF8800, what is the Green value in denary?</label><input class=\"ans-input\" id=\"c5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c5\" data-fb=\"fc5\" data-ans=\"136|88 hex\">Check</button><span class=\"fb\" id=\"fc5\"></span></div><div class=\"answer-row\"><label>6. What colour results from equal R, G, B values?</label><input class=\"ans-input\" id=\"c6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c6\" data-fb=\"fc6\" data-ans=\"grey|gray|a shade of grey|white if all 255\">Check</button><span class=\"fb\" id=\"fc6\"></span></div><div class=\"answer-row\"><label>7. How many different 24-bit colours are possible?</label><input class=\"ans-input\" id=\"c7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c7\" data-fb=\"fc7\" data-ans=\"16777216|16.7 million|16,777,216\">Check</button><span class=\"fb\" id=\"fc7\"></span></div><div class=\"answer-row\"><label>8. What does the # symbol mean before a colour code?</label><input class=\"ans-input\" id=\"c8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c8\" data-fb=\"fc8\" data-ans=\"it is hexadecimal|hex value|hexadecimal|indicates hex\">Check</button><span class=\"fb\" id=\"fc8\"></span></div></div>"}, {"type": "summary", "title": "Lesson 3 Summary", "body": "<ul>\n<li>Hex colour codes follow the format <code>#RRGGBB</code> — two hex digits per colour channel</li>\n<li>Each channel (R, G, B) is 8 bits → 256 possible values (00–FF hex = 0–255 denary)</li>\n<li>Total 24-bit colours = 256³ = 16,777,216</li>\n<li>White = #FFFFFF, Black = #000000, Pure Red = #FF0000</li>\n<li>Equal R, G, B values produce shades of grey</li>\n<li>Hex is also used for memory addresses, error codes, MAC addresses</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: how images are stored using binary and hex.</div>"}, {"type": "compete", "title": "🏆 Hex Colours Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Hex Colours Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "What colour is #FF0000?", "answers": ["red", "pure red"]}, {"q": "What colour is #FFFFFF?", "answers": ["white"]}, {"q": "What colour is #000000?", "answers": ["black"]}, {"q": "What colour is #FFFF00?", "answers": ["yellow"]}, {"q": "What colour is #00FFFF?", "answers": ["cyan"]}, {"q": "How many 24-bit colours exist?", "answers": ["16777216", "16.7 million"]}, {"q": "Equal R, G, B values make what colour?", "answers": ["grey", "gray"]}, {"q": "In #FF8800, what is the Blue value?", "answers": ["0", "00"]}, {"q": "What is R in denary for #AA0000?", "answers": ["170"]}, {"q": "Format of hex colour code?", "answers": ["RRGGBB", "#RRGGBB"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

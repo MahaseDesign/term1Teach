@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y7 Binary L1 — What is Binary?</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y7b1';
+const SLIDES = [{"type": "intro", "title": "What is Binary?", "body": "<p>Every computer in the world — from your phone to a supercomputer — stores and processes <strong>everything</strong> as tiny electrical signals that are either <strong>on</strong> or <strong>off</strong>.</p>\n<div class=\"callout\">💡 We use the number <strong>0</strong> for OFF and <strong>1</strong> for ON. This two-symbol system is called <strong>binary</strong> — and it is the language of all computers.</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Why just 0 and 1?</h4><ul><li>Electronic circuits have two stable states — on or off</li><li>Simple = reliable. Less chance of errors</li><li>Easy to build using billions of tiny switches called <strong>transistors</strong></li></ul></div>\n<div class=\"card\"><h4>What can binary represent?</h4><ul><li>Numbers</li><li>Letters and punctuation</li><li>Images and video</li><li>Sound</li><li>Any data you can imagine</li></ul></div>\n</div>"}, {"type": "concept", "title": "Bits and Bytes", "body": "<p>A single binary digit — a <code>0</code> or a <code>1</code> — is called a <strong>bit</strong>. The word comes from <em>binary digit</em>.</p>\n<div class=\"three-col\">\n<div class=\"card\"><h4>Bit</h4><p>One binary digit. The smallest unit of data. Either <strong>0</strong> or <strong>1</strong>.</p></div>\n<div class=\"card\"><h4>Nibble</h4><p>4 bits together. Can represent 16 different values (0–15).</p></div>\n<div class=\"card\"><h4>Byte</h4><p>8 bits together. Can represent 256 different values (0–255). The standard unit of computer storage.</p></div>\n</div>\n<div class=\"callout\">🔢 8 bits = 1 byte. Think of it like 8 light switches — each can be on or off. Together they can make 256 different combinations.</div>\n<table class=\"bit-table\"><tr><th>Unit</th><th>Size</th><th>Possible Values</th></tr>\n<tr><td>Bit</td><td>1 binary digit</td><td>2 (0 or 1)</td></tr>\n<tr><td>Nibble</td><td>4 bits</td><td>16</td></tr>\n<tr><td>Byte</td><td>8 bits</td><td>256</td></tr></table>"}, {"type": "concept", "title": "Counting in Denary (Base 10)", "body": "<p>Before learning binary, let's remind ourselves how our normal number system works. We use <strong>denary</strong> (also called decimal or base 10) — it has 10 digits: 0 through 9.</p>\n<div class=\"callout\">Each position in a denary number represents a <strong>power of 10</strong>: ones, tens, hundreds, thousands...</div>\n<table class=\"bit-table\"><tr><th>Thousands</th><th>Hundreds</th><th>Tens</th><th>Ones</th></tr>\n<tr><td class=\"bit-hi\">1</td><td class=\"bit-hi\">3</td><td class=\"bit-hi\">4</td><td class=\"bit-hi\">7</td></tr>\n<tr><td>1×1000</td><td>3×100</td><td>4×10</td><td>7×1</td></tr></table>\n<p>1000 + 300 + 40 + 7 = <strong>1347</strong></p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Key idea</h4><p>Each column is worth <strong>10× the column to its right</strong>. We call this positional or place-value notation.</p></div>\n<div class=\"card\"><h4>Binary works the same way...</h4><p>...but instead of powers of 10, binary uses <strong>powers of 2</strong>. Each column is worth 2× the column to its right.</p></div>\n</div>"}, {"type": "concept", "title": "Binary Place Values", "body": "<p>Binary (base 2) uses the same positional idea — but each column doubles as you move left.</p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>2⁷</td><td>2⁶</td><td>2⁵</td><td>2⁴</td><td>2³</td><td>2²</td><td>2¹</td><td>2⁰</td></tr></table>\n<div class=\"callout\">💡 Start from the right with <strong>1</strong>, then double each time: 1, 2, 4, 8, 16, 32, 64, 128...</div>\n<p>An 8-bit number uses all 8 columns above. Let's look at a simple example:</p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr></table>\n<p>Columns with a <strong>1</strong>: 4 + 1 = <strong>5 in denary</strong></p>\n<div class=\"callout warn\">⚠️ Always write 8 binary digits (padding with zeros on the left) so the place values are clear.</div>"}, {"type": "concept", "title": "Reading Binary Numbers", "body": "<p>To read a binary number, write out the place values, place the binary digits underneath, then <strong>add up the columns that have a 1</strong>.</p>\n<p><strong>Example: convert 00001010 to denary</strong></p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td>0</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td></tr></table>\n<p>Columns with 1: <strong>8 + 2 = 10</strong></p>\n<div class=\"callout success\">✓ 00001010 in binary = 10 in denary</div>\n<p><strong>Example: convert 00010101 to denary</strong></p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td></tr></table>\n<p>Columns with 1: <strong>16 + 4 + 1 = 21</strong></p>"}, {"type": "concept", "title": "Storage Units — KB, MB, GB, TB", "body": "<p>Real data is much bigger than one byte. We use larger units to measure storage:</p>\n<table class=\"bit-table\"><tr><th>Unit</th><th>Symbol</th><th>Equals</th><th>Example</th></tr>\n<tr><td>Kilobyte</td><td>KB</td><td>1,024 bytes</td><td>A short text message</td></tr>\n<tr><td>Megabyte</td><td>MB</td><td>1,024 KB</td><td>A 3-minute MP3 song ≈ 4 MB</td></tr>\n<tr><td>Gigabyte</td><td>GB</td><td>1,024 MB</td><td>A DVD film ≈ 4.7 GB</td></tr>\n<tr><td>Terabyte</td><td>TB</td><td>1,024 GB</td><td>A large hard drive</td></tr></table>\n<div class=\"callout warn\">⚠️ We use 1024 (not 1000) because computers work in powers of 2: 2¹⁰ = 1024.</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Memory tip</h4><p>Kilo → Mega → Giga → Tera<br>Each step multiplies by 1,024</p></div>\n<div class=\"card\"><h4>Real examples</h4><ul><li>This web page ≈ 200 KB</li><li>A photo ≈ 3–5 MB</li><li>A film ≈ 2–15 GB</li></ul></div>\n</div>"}, {"type": "concept", "title": "Why Binary Matters in Computing", "body": "<p>You now understand that all data is stored as binary. But why does this matter in real life?</p>\n<div class=\"three-col\">\n<div class=\"card\"><h4>File sizes</h4><p>Understanding bits and bytes helps you predict how much storage you need and how long a download will take.</p></div>\n<div class=\"card\"><h4>Data limits</h4><p>An 8-bit number can only go up to 255. A 16-bit number goes to 65,535. More bits = bigger numbers.</p></div>\n<div class=\"card\"><h4>Colours in images</h4><p>A 1-bit image is black and white only. An 8-bit image has 256 colours. A 24-bit image has 16.7 million colours.</p></div>\n</div>\n<div class=\"callout\">🎮 Old video games used 8-bit graphics — only 256 possible colours — because memory was expensive. Modern games use 24-bit true colour.</div>\n<div class=\"callout warn\">⚠️ A famous bug called the <strong>Y2K bug</strong> happened because programmers only used 2 digits to store the year — they ran out of bits!</div>"}, {"type": "activity", "title": "Guided Tasks — Binary Basics", "body": "<div class=\"task-box\"><h4>📝 Test your understanding</h4><div class=\"answer-row\"><label>1. What does the word 'binary' mean in maths?</label><input class=\"ans-input\" id=\"q1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q1\" data-fb=\"fq1\" data-ans=\"base 2|base two|base-2|number system with two digits|two|2\">Check</button><span class=\"fb\" id=\"fq1\"></span></div><div class=\"answer-row\"><label>2. How many bits are in one byte?</label><input class=\"ans-input\" id=\"q2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q2\" data-fb=\"fq2\" data-ans=\"8|eight\">Check</button><span class=\"fb\" id=\"fq2\"></span></div><div class=\"answer-row\"><label>3. What is a 'bit'?</label><input class=\"ans-input\" id=\"q3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q3\" data-fb=\"fq3\" data-ans=\"a binary digit|one binary digit|0 or 1|a single 0 or 1|binary digit\">Check</button><span class=\"fb\" id=\"fq3\"></span></div><div class=\"answer-row\"><label>4. What is the place value of the rightmost bit?</label><input class=\"ans-input\" id=\"q4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q4\" data-fb=\"fq4\" data-ans=\"1|one|ones\">Check</button><span class=\"fb\" id=\"fq4\"></span></div><div class=\"answer-row\"><label>5. How many bytes in 1 kilobyte?</label><input class=\"ans-input\" id=\"q5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q5\" data-fb=\"fq5\" data-ans=\"1024\">Check</button><span class=\"fb\" id=\"fq5\"></span></div><div class=\"answer-row\"><label>6. What denary value does 00001000 represent?</label><input class=\"ans-input\" id=\"q6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q6\" data-fb=\"fq6\" data-ans=\"8|eight\">Check</button><span class=\"fb\" id=\"fq6\"></span></div><div class=\"answer-row\"><label>7. How many colours can 8-bit colour depth show?</label><input class=\"ans-input\" id=\"q7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q7\" data-fb=\"fq7\" data-ans=\"256|two hundred and fifty six\">Check</button><span class=\"fb\" id=\"fq7\"></span></div><div class=\"answer-row\"><label>8. Name the storage unit equal to 1,024 megabytes.</label><input class=\"ans-input\" id=\"q8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"q8\" data-fb=\"fq8\" data-ans=\"gigabyte|GB|a gigabyte\">Check</button><span class=\"fb\" id=\"fq8\"></span></div></div>"}, {"type": "summary", "title": "Lesson 1 Summary", "body": "<ul>\n<li>Computers use <strong>binary</strong> (base 2) — only 0s and 1s because circuits have two states: on/off</li>\n<li>A single binary digit is a <strong>bit</strong>; 8 bits = 1 <strong>byte</strong></li>\n<li>Binary uses <strong>place values that are powers of 2</strong>: 1, 2, 4, 8, 16, 32, 64, 128</li>\n<li>To read binary: write place values, put digits underneath, add columns with a 1</li>\n<li>Storage units: KB (1024 bytes) → MB → GB → TB — each ×1024</li>\n<li>More bits = larger numbers and better quality (e.g. colours in images)</li>\n</ul>\n<div class=\"callout success\">✅ Great start! Next lesson: converting between binary and denary.</div>"}, {"type": "compete", "title": "🏆 Binary Basics Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Binary Basics Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "How many bits in a byte?", "answers": ["8", "eight"]}, {"q": "What does the '1' or '0' in binary represent?", "answers": ["on or off", "on/off", "binary digit", "bit"]}, {"q": "What is a single binary digit called?", "answers": ["bit", "a bit"]}, {"q": "What is the place value of the rightmost bit?", "answers": ["1", "one"]}, {"q": "How many bytes in 1 kilobyte?", "answers": ["1024"]}, {"q": "What is 00001000 in denary?", "answers": ["8"]}, {"q": "How many colours can 8-bit colour represent?", "answers": ["256"]}, {"q": "1024 kilobytes = 1 what?", "answers": ["megabyte", "MB"]}, {"q": "How many bits in a nibble?", "answers": ["4", "four"]}, {"q": "Binary is base how?", "answers": ["2", "two", "base 2"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

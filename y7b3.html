@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y7 Binary L2 — Binary to Denary</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y7b2';
+const SLIDES = [{"type": "intro", "title": "Converting Binary to Denary", "body": "<p>In Lesson 1 we learnt that binary uses place values that are powers of 2. Now we'll practise converting binary numbers into the denary (decimal) numbers we use every day.</p>\n<div class=\"callout\">🎯 The method: write out the 8 place values, put your binary digits underneath, then <strong>add up the columns that have a 1</strong>.</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>The 8 place values</h4>\n<table class=\"bit-table\" style=\"margin:0\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr></table>\n</div>\n<div class=\"card\"><h4>Quick memory trick</h4><p>Start from 1 on the right and keep doubling:<br>1, 2, 4, 8, 16, 32, 64, 128</p></div>\n</div>"}, {"type": "concept", "title": "Worked Example 1 — Simple", "body": "<p>Convert <strong>00000101</strong> to denary.</p>\n<p><strong>Step 1:</strong> Write the place values</p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td></tr></table>\n<p><strong>Step 2:</strong> Identify columns with a 1 → 4 and 1</p>\n<p><strong>Step 3:</strong> Add them → 4 + 1 = <strong>5</strong></p>\n<div class=\"callout success\">✓ 00000101 = 5 in denary</div>"}, {"type": "concept", "title": "Worked Example 2 — Medium", "body": "<p>Convert <strong>00011010</strong> to denary.</p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td>0</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td>0</td></tr></table>\n<p>Columns with 1: <strong>16 + 8 + 2 = 26</strong></p>\n<div class=\"callout success\">✓ 00011010 = 26 in denary</div>\n<p><strong>Another example: 00110111</strong></p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td>0</td><td>0</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td></tr></table>\n<p>32 + 16 + 4 + 2 + 1 = <strong>55</strong></p>"}, {"type": "concept", "title": "Worked Example 3 — Larger Numbers", "body": "<p>Convert <strong>10110001</strong> to denary.</p>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td>0</td><td>0</td><td>0</td><td class=\"bit-hi\">1</td></tr></table>\n<p>Columns with 1: <strong>128 + 32 + 16 + 1 = 177</strong></p>\n<div class=\"callout success\">✓ 10110001 = 177 in denary</div>\n<div class=\"callout\">💡 The maximum value of an 8-bit number is <strong>11111111</strong> = 128+64+32+16+8+4+2+1 = <strong>255</strong></div>\n<table class=\"bit-table\"><tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td></tr></table>"}, {"type": "concept", "title": "Common Patterns to Remember", "body": "<p>Some binary numbers come up so often that it helps to memorise them:</p>\n<table class=\"bit-table\"><tr><th>Binary</th><th>Denary</th><th>Why it matters</th></tr>\n<tr><td>00000001</td><td>1</td><td>Smallest positive value</td></tr>\n<tr><td>00000010</td><td>2</td><td>Power of 2</td></tr>\n<tr><td>00001000</td><td>8</td><td>Power of 2</td></tr>\n<tr><td>00010000</td><td>16</td><td>Power of 2</td></tr>\n<tr><td>01000000</td><td>64</td><td>Power of 2</td></tr>\n<tr><td>10000000</td><td>128</td><td>Largest single bit</td></tr>\n<tr><td>11111111</td><td>255</td><td>Maximum 8-bit value</td></tr>\n<tr><td>00000000</td><td>0</td><td>All off</td></tr></table>\n<div class=\"callout\">💡 If only one bit is 1, the answer is just that column's place value.</div>"}, {"type": "concept", "title": "Checking Your Answer", "body": "<p>How do you know if your conversion is correct? Two checks:</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Check 1 — Range</h4><p>An 8-bit number must be between <strong>0 and 255</strong>.<br>If your answer is bigger or negative, you made an error.</p></div>\n<div class=\"card\"><h4>Check 2 — Even/Odd</h4><p>If the <strong>rightmost bit is 1</strong>, the number is <strong>odd</strong>.<br>If the rightmost bit is 0, the number is <strong>even</strong>.</p></div>\n</div>\n<p><strong>Examples:</strong></p>\n<ul class=\"sb\"><li><code>00000111</code> ends in 1 → <strong>odd</strong>. Value = 4+2+1 = 7 ✓</li>\n<li><code>00001100</code> ends in 0 → <strong>even</strong>. Value = 8+4 = 12 ✓</li>\n<li><code>10000001</code> ends in 1 → <strong>odd</strong>. Value = 128+1 = 129 ✓</li></ul>\n<div class=\"callout success\">✓ These quick checks save you from silly mistakes in exams!</div>"}, {"type": "concept", "title": "Partial Bytes — 4-bit Numbers", "body": "<p>You may also see <strong>4-bit numbers</strong> (nibbles). They use only the four rightmost place values:</p>\n<table class=\"bit-table\"><tr><th>8</th><th>4</th><th>2</th><th>1</th></tr>\n<tr><td class=\"bit-hi\">1</td><td>0</td><td class=\"bit-hi\">1</td><td class=\"bit-hi\">1</td></tr></table>\n<p>8 + 2 + 1 = <strong>11</strong></p>\n<div class=\"callout\">A 4-bit number can represent values from 0 to 15 (2⁴ - 1 = 15)</div>\n<div class=\"two-col\">\n<div class=\"card\"><h4>More 4-bit examples</h4>\n<table class=\"bit-table\" style=\"margin:4px 0\"><tr><th>8</th><th>4</th><th>2</th><th>1</th><th>=</th></tr>\n<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>\n<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>15</td></tr>\n<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>8</td></tr></table>\n</div>\n<div class=\"card\"><h4>Why 4-bit matters</h4><p>Each hexadecimal digit (covered in Year 8) represents exactly 4 bits. Learning nibbles now gives you a head start!</p></div>\n</div>"}, {"type": "activity", "title": "Guided Tasks — Binary to Denary", "body": "<div class=\"task-box\"><h4>📝 Convert these binary numbers to denary</h4><div class=\"answer-row\"><label>1. Convert 00000011 to denary:</label><input class=\"ans-input\" id=\"c1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c1\" data-fb=\"fc1\" data-ans=\"3|three\">Check</button><span class=\"fb\" id=\"fc1\"></span></div><div class=\"answer-row\"><label>2. Convert 00001111 to denary:</label><input class=\"ans-input\" id=\"c2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c2\" data-fb=\"fc2\" data-ans=\"15|fifteen\">Check</button><span class=\"fb\" id=\"fc2\"></span></div><div class=\"answer-row\"><label>3. Convert 00010000 to denary:</label><input class=\"ans-input\" id=\"c3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c3\" data-fb=\"fc3\" data-ans=\"16|sixteen\">Check</button><span class=\"fb\" id=\"fc3\"></span></div><div class=\"answer-row\"><label>4. Convert 01000001 to denary:</label><input class=\"ans-input\" id=\"c4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c4\" data-fb=\"fc4\" data-ans=\"65|sixty-five\">Check</button><span class=\"fb\" id=\"fc4\"></span></div><div class=\"answer-row\"><label>5. Convert 10000000 to denary:</label><input class=\"ans-input\" id=\"c5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c5\" data-fb=\"fc5\" data-ans=\"128\">Check</button><span class=\"fb\" id=\"fc5\"></span></div><div class=\"answer-row\"><label>6. Convert 11111111 to denary:</label><input class=\"ans-input\" id=\"c6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c6\" data-fb=\"fc6\" data-ans=\"255\">Check</button><span class=\"fb\" id=\"fc6\"></span></div><div class=\"answer-row\"><label>7. Convert 00101010 to denary:</label><input class=\"ans-input\" id=\"c7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c7\" data-fb=\"fc7\" data-ans=\"42|forty-two\">Check</button><span class=\"fb\" id=\"fc7\"></span></div><div class=\"answer-row\"><label>8. Is 00001110 odd or even?</label><input class=\"ans-input\" id=\"c8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c8\" data-fb=\"fc8\" data-ans=\"even\">Check</button><span class=\"fb\" id=\"fc8\"></span></div><div class=\"answer-row\"><label>9. What is the maximum 8-bit denary value?</label><input class=\"ans-input\" id=\"c9\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c9\" data-fb=\"fc9\" data-ans=\"255\">Check</button><span class=\"fb\" id=\"fc9\"></span></div><div class=\"answer-row\"><label>10. Convert 4-bit 1010 to denary:</label><input class=\"ans-input\" id=\"c10\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"c10\" data-fb=\"fc10\" data-ans=\"10|ten\">Check</button><span class=\"fb\" id=\"fc10\"></span></div></div>"}, {"type": "summary", "title": "Lesson 2 Summary", "body": "<ul>\n<li>To convert binary to denary: write the 8 place values (128,64,32,16,8,4,2,1), place digits beneath, add columns with a 1</li>\n<li>Maximum 8-bit value = <strong>11111111 = 255</strong></li>\n<li>Minimum 8-bit value = <strong>00000000 = 0</strong></li>\n<li>If the rightmost bit is 1 → number is <strong>odd</strong></li>\n<li>If the rightmost bit is 0 → number is <strong>even</strong></li>\n<li>A 4-bit nibble represents 0–15</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: converting denary back to binary.</div>"}, {"type": "compete", "title": "🏆 Binary→Denary Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Binary to Denary Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "What is 00000001 in denary?", "answers": ["1"]}, {"q": "What is 00001000 in denary?", "answers": ["8"]}, {"q": "What is 11111111 in denary?", "answers": ["255"]}, {"q": "What is 10000000 in denary?", "answers": ["128"]}, {"q": "What is 00000101 in denary?", "answers": ["5"]}, {"q": "What is 00001111 in denary?", "answers": ["15"]}, {"q": "Is 00001110 odd or even?", "answers": ["even"]}, {"q": "What is the maximum 8-bit value?", "answers": ["255"]}, {"q": "What is 00010001 in denary?", "answers": ["17"]}, {"q": "What is 4-bit 1111 in denary?", "answers": ["15"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

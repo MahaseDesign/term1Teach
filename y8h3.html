@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y8 Hex L2 — Hex to Denary & Back</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y8h2';
+const SLIDES = [{"type": "intro", "title": "Hexadecimal ↔ Denary Conversion", "body": "<p>Now that you know what hexadecimal is, let's learn how to convert between hex and the denary (decimal) numbers we use every day.</p>\n<div class=\"callout\">🎯 Hexadecimal uses <strong>powers of 16</strong> as place values — just as denary uses powers of 10 and binary uses powers of 2.</div>\n<table class=\"bit-table\"><tr><th>Position</th><th>3rd from right</th><th>2nd from right</th><th>Rightmost</th></tr>\n<tr><td>Place value</td><td>256 (16²)</td><td>16 (16¹)</td><td>1 (16⁰)</td></tr></table>\n<div class=\"two-col\">\n<div class=\"card\"><h4>1-digit hex</h4><p>Values 0–15. Just convert directly: F = 15, A = 10, etc.</p></div>\n<div class=\"card\"><h4>2-digit hex</h4><p>Left digit × 16, add right digit.<br>e.g. 2F = (2×16) + 15 = 47</p></div>\n</div>"}, {"type": "concept", "title": "Hex to Denary — 2 Digits", "body": "<p>Convert <strong>1F</strong> to denary:</p>\n<table class=\"bit-table\"><tr><th>Hex digit</th><th>Position value</th><th>Calculation</th></tr>\n<tr><td class=\"bit-hi\">1</td><td>16s</td><td>1 × 16 = 16</td></tr>\n<tr><td class=\"bit-hi\">F (=15)</td><td>1s</td><td>15 × 1 = 15</td></tr></table>\n<p>16 + 15 = <strong>31</strong></p>\n<div class=\"callout success\">✓ 1F hex = 31 denary</div>\n<p><strong>More examples:</strong></p>\n<table class=\"bit-table\"><tr><th>Hex</th><th>Calculation</th><th>Denary</th></tr>\n<tr><td>2B</td><td>(2×16)+11</td><td>43</td></tr>\n<tr><td>A0</td><td>(10×16)+0</td><td>160</td></tr>\n<tr><td>FF</td><td>(15×16)+15</td><td>255</td></tr>\n<tr><td>10</td><td>(1×16)+0</td><td>16</td></tr></table>"}, {"type": "concept", "title": "Hex to Denary — 3 Digits", "body": "<p>Convert <strong>2AF</strong> to denary:</p>\n<table class=\"bit-table\"><tr><th>Hex digit</th><th>Position value</th><th>Calculation</th></tr>\n<tr><td>2</td><td>256s</td><td>2 × 256 = 512</td></tr>\n<tr><td>A (=10)</td><td>16s</td><td>10 × 16 = 160</td></tr>\n<tr><td>F (=15)</td><td>1s</td><td>15 × 1 = 15</td></tr></table>\n<p>512 + 160 + 15 = <strong>687</strong></p>\n<div class=\"callout success\">✓ 2AF hex = 687 denary</div>\n<div class=\"callout\">💡 Most two-byte values in computing are shown as 4 hex digits (e.g. <code>00FF</code> to <code>FFFF</code>). The method is the same — more columns, larger place values.</div>"}, {"type": "concept", "title": "Denary to Hex — Method", "body": "<p>Convert <strong>75</strong> to hexadecimal:</p>\n<p><strong>Method: repeated division by 16</strong></p>\n<table class=\"bit-table\"><tr><th>Division</th><th>Result</th><th>Remainder (hex digit)</th></tr>\n<tr><td>75 ÷ 16</td><td>4</td><td class=\"bit-hi\">11 = B ← right digit</td></tr>\n<tr><td>4 ÷ 16</td><td>0</td><td class=\"bit-hi\">4 ← left digit</td></tr></table>\n<p>Read remainders <strong>bottom to top</strong>: <strong>4B</strong></p>\n<div class=\"callout success\">✓ 75 = 4B in hex</div>\n<div class=\"callout warn\">⚠️ If the remainder is 10–15, convert to A–F before writing it down!</div>"}, {"type": "concept", "title": "Denary to Hex — More Examples", "body": "<table class=\"bit-table\"><tr><th>Denary</th><th>÷16 = ?</th><th>Remainder</th><th>Hex</th></tr>\n<tr><td>16</td><td>1 r 0</td><td>0, then 1</td><td>10</td></tr>\n<tr><td>31</td><td>1 r 15</td><td>F, then 1</td><td>1F</td></tr>\n<tr><td>160</td><td>10 r 0</td><td>0, then A</td><td>A0</td></tr>\n<tr><td>255</td><td>15 r 15</td><td>F, then F</td><td>FF</td></tr>\n<tr><td>200</td><td>12 r 8</td><td>8, then C</td><td>C8</td></tr></table>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Shortcut via binary</h4><p>Convert denary → binary first, then split into nibbles and convert each to hex. Sometimes easier than dividing by 16!</p></div>\n<div class=\"card\"><h4>Quick check</h4><p>Always convert your hex answer back to denary to verify. Example: C8 = (12×16)+8 = 200 ✓</p></div>\n</div>"}, {"type": "concept", "title": "Notation — How Hex is Written", "body": "<p>Hexadecimal values are written in several ways to distinguish them from denary:</p>\n<table class=\"bit-table\"><tr><th>Style</th><th>Example</th><th>Used in</th></tr>\n<tr><td><code>0x</code> prefix</td><td>0xFF</td><td>Programming (Python, C, JavaScript)</td></tr>\n<tr><td><code>#</code> prefix</td><td>#FF5500</td><td>HTML/CSS colour codes</td></tr>\n<tr><td>H suffix</td><td>FFH</td><td>Assembly language</td></tr>\n<tr><td>Subscript 16</td><td>FF₁₆</td><td>Textbooks and exams</td></tr></table>\n<div class=\"callout\">💡 In Python: <code>hex(255)</code> → <code>'0xff'</code>. And <code>int('ff', 16)</code> → <code>255</code>.</div>"}, {"type": "activity", "title": "Guided Tasks — Hex ↔ Denary", "body": "<div class=\"task-box\"><h4>📝 Convert between hexadecimal and denary</h4><div class=\"answer-row\"><label>1. Convert hex 10 to denary:</label><input class=\"ans-input\" id=\"hd1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd1\" data-fb=\"fhd1\" data-ans=\"16|sixteen\">Check</button><span class=\"fb\" id=\"fhd1\"></span></div><div class=\"answer-row\"><label>2. Convert hex 1F to denary:</label><input class=\"ans-input\" id=\"hd2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd2\" data-fb=\"fhd2\" data-ans=\"31|thirty-one\">Check</button><span class=\"fb\" id=\"fhd2\"></span></div><div class=\"answer-row\"><label>3. Convert hex FF to denary:</label><input class=\"ans-input\" id=\"hd3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd3\" data-fb=\"fhd3\" data-ans=\"255\">Check</button><span class=\"fb\" id=\"fhd3\"></span></div><div class=\"answer-row\"><label>4. Convert hex A0 to denary:</label><input class=\"ans-input\" id=\"hd4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd4\" data-fb=\"fhd4\" data-ans=\"160\">Check</button><span class=\"fb\" id=\"fhd4\"></span></div><div class=\"answer-row\"><label>5. Convert denary 16 to hex:</label><input class=\"ans-input\" id=\"hd5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd5\" data-fb=\"fhd5\" data-ans=\"10\">Check</button><span class=\"fb\" id=\"fhd5\"></span></div><div class=\"answer-row\"><label>6. Convert denary 31 to hex:</label><input class=\"ans-input\" id=\"hd6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd6\" data-fb=\"fhd6\" data-ans=\"1F|1f\">Check</button><span class=\"fb\" id=\"fhd6\"></span></div><div class=\"answer-row\"><label>7. Convert denary 255 to hex:</label><input class=\"ans-input\" id=\"hd7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd7\" data-fb=\"fhd7\" data-ans=\"FF|ff\">Check</button><span class=\"fb\" id=\"fhd7\"></span></div><div class=\"answer-row\"><label>8. Convert denary 43 to hex:</label><input class=\"ans-input\" id=\"hd8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd8\" data-fb=\"fhd8\" data-ans=\"2B|2b\">Check</button><span class=\"fb\" id=\"fhd8\"></span></div><div class=\"answer-row\"><label>9. What prefix is used for hex in programming?</label><input class=\"ans-input\" id=\"hd9\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd9\" data-fb=\"fhd9\" data-ans=\"0x|0X\">Check</button><span class=\"fb\" id=\"fhd9\"></span></div><div class=\"answer-row\"><label>10. Convert hex 2B to denary:</label><input class=\"ans-input\" id=\"hd10\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"hd10\" data-fb=\"fhd10\" data-ans=\"43|forty-three\">Check</button><span class=\"fb\" id=\"fhd10\"></span></div></div>"}, {"type": "summary", "title": "Lesson 2 Summary", "body": "<ul>\n<li>Hex place values: 1, 16, 256 (powers of 16)</li>\n<li>Hex → Denary: multiply each digit by its place value, add</li>\n<li>Denary → Hex: divide repeatedly by 16, read remainders bottom to top</li>\n<li>Remainders 10–15 → write as A–F</li>\n<li>FF hex = 255 denary; 10 hex = 16 denary</li>\n<li>Hex is written with 0x prefix in code, # in CSS</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: hexadecimal colour codes.</div>"}, {"type": "compete", "title": "🏆 Hex↔Denary Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Hex and Denary Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "Hex 10 in denary?", "answers": ["16"]}, {"q": "Hex 1F in denary?", "answers": ["31"]}, {"q": "Hex FF in denary?", "answers": ["255"]}, {"q": "Hex A0 in denary?", "answers": ["160"]}, {"q": "Denary 16 in hex?", "answers": ["10"]}, {"q": "Denary 255 in hex?", "answers": ["FF", "ff"]}, {"q": "Denary 31 in hex?", "answers": ["1F", "1f"]}, {"q": "Hex 2B in denary?", "answers": ["43"]}, {"q": "What prefix is used for hex in programming?", "answers": ["0x"]}, {"q": "Hex C in denary?", "answers": ["12"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

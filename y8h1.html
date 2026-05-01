@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y7 Binary L6 — Real World & Review</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y7b6';
+const SLIDES = [{"type": "intro", "title": "Binary in the Real World", "body": "<p>This final lesson brings together everything you have learned about binary. We'll see how binary is used in real computing systems, practise all four skills, and take on the ultimate speed challenge.</p>\n<div class=\"three-col\">\n<div class=\"card\"><h4>L1 — What is Binary</h4><p>Bits, bytes, storage units, why computers use binary</p></div>\n<div class=\"card\"><h4>L2 — Binary to Denary</h4><p>Place values, reading binary numbers</p></div>\n<div class=\"card\"><h4>L3 — Denary to Binary</h4><p>Place value method, repeated division</p></div>\n</div>\n<div class=\"three-col\">\n<div class=\"card\"><h4>L4 — Binary Addition</h4><p>Four rules, carries, overflow</p></div>\n<div class=\"card\"><h4>L5 — Binary Shifts</h4><p>Left/right shifts, multiply/divide by 2</p></div>\n<div class=\"card\"><h4>L6 — Real World</h4><p>ASCII, colours, images, networking</p></div>\n</div>"}, {"type": "concept", "title": "ASCII — Encoding Text in Binary", "body": "<p>How does a computer store the letter 'A'? It uses a standard code called <strong>ASCII</strong> (American Standard Code for Information Interchange).</p>\n<table class=\"bit-table\"><tr><th>Character</th><th>ASCII (denary)</th><th>Binary</th></tr>\n<tr><td>A</td><td>65</td><td>01000001</td></tr>\n<tr><td>B</td><td>66</td><td>01000010</td></tr>\n<tr><td>Z</td><td>90</td><td>01011010</td></tr>\n<tr><td>a</td><td>97</td><td>01100001</td></tr>\n<tr><td>0 (zero)</td><td>48</td><td>00110000</td></tr>\n<tr><td>Space</td><td>32</td><td>00100000</td></tr></table>\n<div class=\"callout\">💡 Notice: 'a' (97) = 'A' (65) + 32. Switching between uppercase and lowercase is just a binary shift of 32 — or flipping one bit!</div>"}, {"type": "concept", "title": "Binary and Colour — RGB", "body": "<p>Computer screens mix three colours of light: <strong>Red, Green, Blue</strong>. Each colour channel is stored as an 8-bit value (0–255).</p>\n<div class=\"three-col\">\n<div class=\"card\"><h4>Red</h4><p>8 bits → 256 shades of red<br>00000000 = no red<br>11111111 = maximum red</p></div>\n<div class=\"card\"><h4>Green</h4><p>8 bits → 256 shades of green</p></div>\n<div class=\"card\"><h4>Blue</h4><p>8 bits → 256 shades of blue</p></div>\n</div>\n<table class=\"bit-table\"><tr><th>Colour</th><th>Red (8-bit)</th><th>Green (8-bit)</th><th>Blue (8-bit)</th></tr>\n<tr><td>White</td><td>255</td><td>255</td><td>255</td></tr>\n<tr><td>Black</td><td>0</td><td>0</td><td>0</td></tr>\n<tr><td>Pure Red</td><td>255</td><td>0</td><td>0</td></tr>\n<tr><td>Yellow</td><td>255</td><td>255</td><td>0</td></tr></table>\n<div class=\"callout\">Total colours: 256 × 256 × 256 = <strong>16,777,216</strong> — that's 24-bit true colour.</div>"}, {"type": "concept", "title": "Pixels and Image Storage", "body": "<p>A digital image is a grid of <strong>pixels</strong>. Each pixel stores one colour value in binary.</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>File size formula</h4><p>Width × Height × Colour depth (bits) ÷ 8 = <strong>bytes</strong></p>\n<p>Example: 100×100 px, 24-bit colour:<br>100 × 100 × 24 ÷ 8 = <strong>30,000 bytes</strong> ≈ 29.3 KB</p></div>\n<div class=\"card\"><h4>Colour depth choices</h4>\n<table class=\"bit-table\" style=\"margin:4px 0\"><tr><th>Bits/px</th><th>Colours</th></tr>\n<tr><td>1</td><td>2 (black/white)</td></tr>\n<tr><td>8</td><td>256</td></tr>\n<tr><td>24</td><td>16.7 million</td></tr></table></div>\n</div>\n<div class=\"callout warn\">⚠️ More colours = bigger file. That's why we have image compression!</div>"}, {"type": "concept", "title": "Binary in Networking — IP Addresses", "body": "<p>Every device on the internet has an <strong>IP address</strong>. A traditional IPv4 address is made of 4 groups of 8 bits (4 bytes).</p>\n<p>For example: <strong>192.168.1.1</strong></p>\n<table class=\"bit-table\"><tr><th>Section</th><th>Denary</th><th>Binary</th></tr>\n<tr><td>First</td><td>192</td><td>11000000</td></tr>\n<tr><td>Second</td><td>168</td><td>10101000</td></tr>\n<tr><td>Third</td><td>1</td><td>00000001</td></tr>\n<tr><td>Fourth</td><td>1</td><td>00000001</td></tr></table>\n<div class=\"callout\">💡 Each section is exactly 8 bits = 0 to 255. This is why IP addresses can't exceed 255 in each part!</div>\n<p>IPv4 total addresses: 256⁴ = <strong>4.3 billion</strong> — nearly used up, hence IPv6 (128-bit addresses).</p>"}, {"type": "concept", "title": "Complete Binary Review", "body": "<p>Let's review all five skills from this unit:</p>\n<table class=\"bit-table\"><tr><th>Skill</th><th>Key Rule</th><th>Example</th></tr>\n<tr><td>Binary → Denary</td><td>Add place values where bit = 1</td><td>00001010 = 8+2 = 10</td></tr>\n<tr><td>Denary → Binary</td><td>Work left to right through place values</td><td>25 = 00011001</td></tr>\n<tr><td>Addition</td><td>0+0=0, 0+1=1, 1+1=10, 1+1+1=11</td><td>3+5=8</td></tr>\n<tr><td>Left shift</td><td>× 2 per place, fill right with 0</td><td>×4 = shift left 2</td></tr>\n<tr><td>Right shift</td><td>÷ 2 per place, fill left with 0</td><td>÷8 = shift right 3</td></tr></table>\n<div class=\"callout success\">✓ These five skills are the foundation of everything in computer science. Master them and everything else gets easier!</div>"}, {"type": "activity", "title": "Final Review Tasks", "body": "<div class=\"task-box\"><h4>📝 Mixed Binary Review</h4><div class=\"answer-row\"><label>1. Convert 00110011 to denary:</label><input class=\"ans-input\" id=\"r1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r1\" data-fb=\"fr1\" data-ans=\"51|fifty-one\">Check</button><span class=\"fb\" id=\"fr1\"></span></div><div class=\"answer-row\"><label>2. Convert 42 to 8-bit binary:</label><input class=\"ans-input\" id=\"r2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r2\" data-fb=\"fr2\" data-ans=\"00101010\">Check</button><span class=\"fb\" id=\"fr2\"></span></div><div class=\"answer-row\"><label>3. 00001001 + 00000111 = (binary):</label><input class=\"ans-input\" id=\"r3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r3\" data-fb=\"fr3\" data-ans=\"00010000\">Check</button><span class=\"fb\" id=\"fr3\"></span></div><div class=\"answer-row\"><label>4. Shift 00000100 left by 2. Denary result:</label><input class=\"ans-input\" id=\"r4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r4\" data-fb=\"fr4\" data-ans=\"16|sixteen\">Check</button><span class=\"fb\" id=\"fr4\"></span></div><div class=\"answer-row\"><label>5. What is ASCII?</label><input class=\"ans-input\" id=\"r5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r5\" data-fb=\"fr5\" data-ans=\"American Standard Code for Information Interchange|a character encoding|text encoding|standard code for characters\">Check</button><span class=\"fb\" id=\"fr5\"></span></div><div class=\"answer-row\"><label>6. How many bits store one RGB colour channel?</label><input class=\"ans-input\" id=\"r6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r6\" data-fb=\"fr6\" data-ans=\"8|eight\">Check</button><span class=\"fb\" id=\"fr6\"></span></div><div class=\"answer-row\"><label>7. Total colours in 24-bit colour?</label><input class=\"ans-input\" id=\"r7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r7\" data-fb=\"fr7\" data-ans=\"16777216|16.7 million|16,777,216\">Check</button><span class=\"fb\" id=\"fr7\"></span></div><div class=\"answer-row\"><label>8. How many bytes in an IPv4 address?</label><input class=\"ans-input\" id=\"r8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r8\" data-fb=\"fr8\" data-ans=\"4|four\">Check</button><span class=\"fb\" id=\"fr8\"></span></div><div class=\"answer-row\"><label>9. What causes an overflow error in binary addition?</label><input class=\"ans-input\" id=\"r9\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r9\" data-fb=\"fr9\" data-ans=\"result exceeds 255|result too large for 8 bits|carry out of bit 8\">Check</button><span class=\"fb\" id=\"fr9\"></span></div><div class=\"answer-row\"><label>10. Shift 10000000 right by 3. Denary result:</label><input class=\"ans-input\" id=\"r10\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"r10\" data-fb=\"fr10\" data-ans=\"16|sixteen\">Check</button><span class=\"fb\" id=\"fr10\"></span></div></div>"}, {"type": "summary", "title": "Year 7 Binary Unit Summary", "body": "<h3>Everything you have learned:</h3>\n<ul>\n<li>Binary uses 0 and 1 only — computers use it because circuits have two states</li>\n<li>8 bits = 1 byte; 1024 bytes = 1 KB; 1024 KB = 1 MB; etc.</li>\n<li>Binary place values (right to left): 1, 2, 4, 8, 16, 32, 64, 128</li>\n<li>Binary → Denary: add up columns with 1</li>\n<li>Denary → Binary: place value method or repeated division</li>\n<li>Binary addition: 4 rules + carries; overflow if result > 255</li>\n<li>Left shift = ×2 per place; Right shift = ÷2 per place</li>\n<li>ASCII: text as binary numbers (A=65, a=97)</li>\n<li>RGB: 3 × 8-bit values = 16.7 million colours</li>\n<li>IPv4: 4 × 8-bit numbers separated by dots</li>\n</ul>\n<div class=\"callout success\">🎉 Congratulations — you have completed the Year 7 Binary unit!</div>"}, {"type": "compete", "title": "🏆 Ultimate Binary Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Ultimate Binary Challenge — All 6 Lessons</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "Convert 00110011 to denary", "answers": ["51"]}, {"q": "Convert 42 to 8-bit binary", "answers": ["00101010"]}, {"q": "What is ASCII?", "answers": ["American Standard Code for Information Interchange", "text encoding standard", "character encoding"]}, {"q": "How many bits in an RGB colour?", "answers": ["24", "twenty-four"]}, {"q": "Shift 00000010 left by 2. Denary?", "answers": ["8"]}, {"q": "How many bytes in an IPv4 address?", "answers": ["4", "four"]}, {"q": "What is the ASCII value of 'A'?", "answers": ["65"]}, {"q": "00000101 + 00000101 in denary?", "answers": ["10", "ten"]}, {"q": "File size formula: W × H × ___ ÷ 8 = bytes", "answers": ["colour depth", "color depth", "bit depth"]}, {"q": "Shift 01000000 right by 3. Denary?", "answers": ["8"]}, {"q": "Maximum 8-bit value?", "answers": ["255"]}, {"q": "1 GB = how many MB?", "answers": ["1024"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

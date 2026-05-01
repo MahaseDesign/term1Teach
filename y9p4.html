@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y9 Python L3 — Loops</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y9p3';
+const SLIDES = [{"type": "intro", "title": "Python Loops — for and while", "body": "<p><strong>Iteration</strong> (looping) lets a program repeat a block of code without copying it out multiple times. Python has two types of loop:</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>for loop</h4><p><strong>Count-controlled</strong> — repeats a set number of times, or for each item in a collection. Best when you know how many repeats.</p></div>\n<div class=\"card\"><h4>while loop</h4><p><strong>Condition-controlled</strong> — repeats as long as a condition is True. Best when you don't know how many repeats in advance.</p></div>\n</div>\n<div class=\"callout\">🎯 Choosing the right loop is a key programming skill — and a common exam question!</div>"}, {"type": "concept", "title": "The for Loop with range()", "body": "<p><code>range()</code> generates a sequence of numbers for the loop to iterate over:</p>\n<pre># range(stop) — 0 to stop-1\nfor i in range(5):\n    print(i)\n# Prints: 0 1 2 3 4\n\n# range(start, stop)\nfor i in range(1, 6):\n    print(i)\n# Prints: 1 2 3 4 5\n\n# range(start, stop, step)\nfor i in range(0, 10, 2):\n    print(i)\n# Prints: 0 2 4 6 8</pre>\n<div class=\"callout warn\">⚠️ range() does NOT include the stop value. range(1,6) gives 1,2,3,4,5 — not 6!</div>"}, {"type": "concept", "title": "The for Loop with Lists", "body": "<p><code>for</code> loops work directly with lists, strings and other collections:</p>\n<pre># Iterate over a list\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor fruit in fruits:\n    print(fruit)\n\n# Iterate over a string\nfor char in \"Hello\":\n    print(char)\n\n# Using enumerate for index + value\nfor i, fruit in enumerate(fruits):\n    print(f\"{i}: {fruit}\")</pre>\n<div class=\"callout\">💡 The loop variable (<code>fruit</code>) takes each value in turn. Choose meaningful names!</div>"}, {"type": "concept", "title": "The while Loop", "body": "<p>A <code>while</code> loop repeats as long as its condition remains True:</p>\n<pre># Countdown\ncount = 5\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Blast off!\")\n\n# Input validation\npassword = \"\"\nwhile password != \"secret\":\n    password = input(\"Enter password: \")\nprint(\"Access granted!\")</pre>\n<div class=\"callout warn\">⚠️ If the condition never becomes False, you get an <strong>infinite loop</strong>! Always make sure something changes inside the loop.</div>"}, {"type": "concept", "title": "break and continue", "body": "<p>Two keywords give extra control over loop execution:</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>break — exit immediately</h4><pre>for i in range(10):\n    if i == 5:\n        break\n    print(i)\n# Prints: 0 1 2 3 4</pre></div>\n<div class=\"card\"><h4>continue — skip this iteration</h4><pre>for i in range(6):\n    if i % 2 == 0:\n        continue\n    print(i)\n# Prints: 1 3 5</pre></div>\n</div>\n<div class=\"callout\">💡 <code>break</code> is often used with <code>while True:</code> to create a loop that runs until a condition is met:<br><code>while True: ... if done: break</code></div>"}, {"type": "concept", "title": "Accumulator Pattern", "body": "<p>A very common pattern: using a loop to build up a result:</p>\n<pre># Sum all numbers 1 to 100\ntotal = 0\nfor i in range(1, 101):\n    total += i\nprint(f\"Sum = {total}\")  # Sum = 5050\n\n# Count how many even numbers in a list\nnumbers = [3, 8, 12, 5, 7, 20, 1]\neven_count = 0\nfor n in numbers:\n    if n % 2 == 0:\n        even_count += 1\nprint(f\"{even_count} even numbers\")  # 3 even numbers</pre>\n<div class=\"callout\">💡 Start the accumulator at 0 (for sum/count) or [] (for a list) <strong>before</strong> the loop.</div>"}, {"type": "concept", "title": "Nested Loops", "body": "<p>Loops can be placed inside other loops — called <strong>nested loops</strong>:</p>\n<pre># Multiplication table\nfor i in range(1, 4):\n    for j in range(1, 4):\n        print(f\"{i} × {j} = {i*j}\")\n\n# Output:\n# 1 × 1 = 1\n# 1 × 2 = 2\n# 1 × 3 = 3\n# 2 × 1 = 2  ... etc.</pre>\n<div class=\"callout warn\">⚠️ The inner loop completes <strong>all</strong> its iterations for each single iteration of the outer loop. A 10×10 nested loop runs 100 times total.</div>"}, {"type": "activity", "title": "Guided Tasks — Loops", "body": "<div class=\"task-box\"><h4>📝 Python loops</h4><div class=\"answer-row\"><label>1. What type of loop is best when you know the number of repeats?</label><input class=\"ans-input\" id=\"lp1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp1\" data-fb=\"flp1\" data-ans=\"for|for loop|count controlled\">Check</button><span class=\"fb\" id=\"flp1\"></span></div><div class=\"answer-row\"><label>2. What type of loop is best when you don't know how many repeats?</label><input class=\"ans-input\" id=\"lp2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp2\" data-fb=\"flp2\" data-ans=\"while|while loop|condition controlled\">Check</button><span class=\"fb\" id=\"flp2\"></span></div><div class=\"answer-row\"><label>3. What does range(1, 6) produce?</label><input class=\"ans-input\" id=\"lp3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp3\" data-fb=\"flp3\" data-ans=\"1 2 3 4 5|1,2,3,4,5|1 to 5\">Check</button><span class=\"fb\" id=\"flp3\"></span></div><div class=\"answer-row\"><label>4. What keyword exits a loop immediately?</label><input class=\"ans-input\" id=\"lp4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp4\" data-fb=\"flp4\" data-ans=\"break\">Check</button><span class=\"fb\" id=\"flp4\"></span></div><div class=\"answer-row\"><label>5. What keyword skips to the next loop iteration?</label><input class=\"ans-input\" id=\"lp5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp5\" data-fb=\"flp5\" data-ans=\"continue\">Check</button><span class=\"fb\" id=\"flp5\"></span></div><div class=\"answer-row\"><label>6. What causes an infinite loop?</label><input class=\"ans-input\" id=\"lp6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp6\" data-fb=\"flp6\" data-ans=\"condition never becomes false|condition never false|always true condition\">Check</button><span class=\"fb\" id=\"flp6\"></span></div><div class=\"answer-row\"><label>7. How many times does range(5) iterate?</label><input class=\"ans-input\" id=\"lp7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp7\" data-fb=\"flp7\" data-ans=\"5|five\">Check</button><span class=\"fb\" id=\"flp7\"></span></div><div class=\"answer-row\"><label>8. What is i after: for i in range(3)? (final value)</label><input class=\"ans-input\" id=\"lp8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp8\" data-fb=\"flp8\" data-ans=\"2|two\">Check</button><span class=\"fb\" id=\"flp8\"></span></div><div class=\"answer-row\"><label>9. What pattern builds up a result across loop iterations?</label><input class=\"ans-input\" id=\"lp9\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp9\" data-fb=\"flp9\" data-ans=\"accumulator|accumulator pattern\">Check</button><span class=\"fb\" id=\"flp9\"></span></div><div class=\"answer-row\"><label>10. What does += do?</label><input class=\"ans-input\" id=\"lp10\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"lp10\" data-fb=\"flp10\" data-ans=\"adds to the variable|increments|adds and assigns\">Check</button><span class=\"fb\" id=\"flp10\"></span></div></div>"}, {"type": "summary", "title": "Lesson 3 Summary", "body": "<ul>\n<li><code>for</code> loop — count-controlled. Use with <code>range()</code> or collections</li>\n<li><code>range(stop)</code>, <code>range(start,stop)</code>, <code>range(start,stop,step)</code> — stop is exclusive</li>\n<li><code>while</code> loop — condition-controlled. Repeats while condition is True</li>\n<li><code>break</code> — exits the loop immediately</li>\n<li><code>continue</code> — skips to the next iteration</li>\n<li>Accumulator pattern: initialise before loop, update inside loop</li>\n<li>Nested loops: inner loop completes fully for each outer iteration</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: functions — writing reusable code blocks.</div>"}, {"type": "compete", "title": "🏆 Loops Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Loops Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "Count-controlled loop type?", "answers": ["for", "for loop"]}, {"q": "Condition-controlled loop type?", "answers": ["while", "while loop"]}, {"q": "range(5) starts at?", "answers": ["0", "zero"]}, {"q": "range(1,6) goes up to but not including?", "answers": ["6", "six"]}, {"q": "Keyword to exit a loop immediately?", "answers": ["break"]}, {"q": "Keyword to skip to next iteration?", "answers": ["continue"]}, {"q": "What causes an infinite loop?", "answers": ["condition never False", "always true condition"]}, {"q": "How many times does range(3) iterate?", "answers": ["3", "three"]}, {"q": "x += 1 means?", "answers": ["x = x + 1", "add 1 to x", "increment x"]}, {"q": "range(0,10,2) gives?", "answers": ["0 2 4 6 8", "even numbers 0 to 8"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>

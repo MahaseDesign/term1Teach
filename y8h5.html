@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y8 Hex L4 — Image Representation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2d3318;--surface:#3a4220;--surface2:#454e27;--border:#5a6632;
+  --accent:#c8e06e;--accent2:#e8c84e;--text:#f0f2e0;--muted:#9aA878;
+  --success:#6ec87a;--warning:#e8c84e;--danger:#e07060;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;}
+.presentation{display:flex;flex-direction:column;height:100vh;}
+.progress-bar{height:4px;background:var(--border);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.5s ease;}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;}
+.slide{width:100%;max-width:940px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:44px 52px;position:relative;overflow-y:auto;max-height:calc(100vh - 130px);animation:sIn 0.3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:none;}}
+.slide::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.stype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:3px 10px;border-radius:5px;display:inline-block;}
+.t-intro   {background:rgba(200,224,110,.15);color:#c8e06e;border:1px solid rgba(200,224,110,.35);}
+.t-concept {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.t-activity{background:rgba(255,160,80,.15);color:#ffa050;border:1px solid rgba(255,160,80,.35);}
+.t-summary {background:rgba(110,200,122,.15);color:#6ec87a;border:1px solid rgba(110,200,122,.35);}
+.t-compete {background:rgba(232,200,78,.15);color:#e8c84e;border:1px solid rgba(232,200,78,.35);}
+.snum{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.slide h1{font-size:clamp(20px,3.5vw,32px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text);}
+.sb{color:var(--muted);font-size:15px;line-height:1.8;}
+.sb ul,.sb ol{padding-left:22px;}
+.sb li{margin-bottom:7px;}
+.sb li::marker{color:var(--accent);}
+.sb strong{color:var(--text);}
+.sb p{margin-bottom:12px;}
+.sb p:last-child{margin-bottom:0;}
+code{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent);}
+pre{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:16px 20px;border-radius:10px;font-size:13px;color:var(--accent);overflow-x:auto;margin:12px 0;line-height:1.7;}
+.callout{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);}
+.callout.warn{border-left-color:var(--warning);background:rgba(232,200,78,.08);}
+.callout.success{border-left-color:var(--success);background:rgba(110,200,122,.08);}
+.callout.danger{border-left-color:var(--danger);background:rgba(224,112,96,.08);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card h4{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;}
+.bit-table{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--mono);}
+.bit-table th{background:var(--surface2);padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--accent);}
+.bit-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;font-size:13px;}
+.bit-table tr:nth-child(even) td{background:rgba(255,255,255,.03);}
+.bit-hi{background:rgba(200,224,110,.18)!important;color:var(--accent);font-weight:700;}
+.task-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin:14px 0;}
+.task-box h4{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.answer-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.answer-row label{font-size:13px;color:var(--muted);min-width:260px;flex:1 1 260px;line-height:1.5;}
+.ans-input{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;color:var(--text);font-family:var(--mono);font-size:14px;width:clamp(140px,30vw,300px);text-align:left;transition:border-color .2s;}
+.ans-input:focus{outline:none;border-color:var(--accent);}
+.check-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.check-btn:hover{background:var(--accent);color:#1a1e08;}
+.fb{font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;display:none;}
+.fb.ok{background:rgba(110,200,122,.15);color:var(--success);border:1px solid var(--success);display:inline-block;}
+.fb.no{background:rgba(224,112,96,.15);color:var(--danger);border:1px solid var(--danger);display:inline-block;}
+.compete-board{background:var(--surface2);border:2px solid var(--warning);border-radius:14px;padding:20px;margin:14px 0;}
+.score-display{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--warning);text-align:center;margin:10px 0;}
+.timer-bar{height:8px;background:var(--border);border-radius:4px;margin:8px 0;overflow:hidden;}
+.timer-fill{height:100%;background:var(--warning);border-radius:4px;transition:width 1s linear;}
+.compete-input{background:var(--bg);border:2px solid var(--warning);border-radius:8px;padding:10px 16px;color:var(--text);font-family:var(--mono);font-size:18px;width:100%;text-align:center;margin:10px 0;}
+.compete-input:focus{outline:none;}
+.compete-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--warning);color:#1a1e08;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:6px;}
+.compete-q{font-size:17px;font-weight:700;text-align:center;padding:14px;color:var(--text);min-height:52px;}
+.leaderboard{list-style:none;margin-top:10px;}
+.leaderboard li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13px;margin-bottom:4px;background:rgba(232,200,78,.07);border:1px solid rgba(232,200,78,.18);}
+.lb-pos{font-family:var(--mono);font-size:12px;color:var(--warning);width:24px;}
+.lb-name{flex:1;font-weight:600;}
+.lb-score{font-family:var(--mono);font-size:13px;color:var(--warning);}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+.nav-btn{padding:8px 22px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{background:var(--accent);color:#1a1e08;border-color:var(--accent);font-weight:700;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.dot-row{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:320px;}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.pdot.active{background:var(--accent);transform:scale(1.4);}
+.pdot.done{background:var(--muted);}
+.pdot.cdot{background:rgba(232,200,78,.35);}
+.pdot.cdot.active{background:var(--warning);}
+.sctr{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.kbhint{font-size:11px;color:var(--muted);}
+@media(max-width:640px){.slide{padding:22px 16px;}.two-col,.three-col{grid-template-columns:1fr;}.nav-btn{padding:7px 12px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <div class="slide-area"><div class="slide" id="slide"></div></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="goPrev()">← Back</button>
+    <div class="nav-center">
+      <div class="dot-row" id="dots"></div>
+      <div class="sctr" id="sctr">1 / 1</div>
+      <div class="kbhint">← → Space to navigate</div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+</div>
+<script>
+const LESSON_ID = 'y8h4';
+const SLIDES = [{"type": "intro", "title": "How Images Are Stored", "body": "<p>Every digital image — a photo, screenshot, or icon — is stored in memory as <strong>binary numbers</strong>. Understanding how this works helps you calculate file sizes and understand quality vs storage tradeoffs.</p>\n<div class=\"callout\">🎯 This lesson: pixels, resolution, colour depth, and the file size formula.</div>\n<div class=\"three-col\">\n<div class=\"card\"><h4>Pixel</h4><p>The smallest single point of colour in a digital image. Short for <em>picture element</em>.</p></div>\n<div class=\"card\"><h4>Resolution</h4><p>The number of pixels in an image — width × height. Higher = more detail.</p></div>\n<div class=\"card\"><h4>Colour depth</h4><p>How many bits are used to store each pixel's colour. More bits = more colours.</p></div>\n</div>"}, {"type": "concept", "title": "Pixels and Resolution", "body": "<p>An image is a rectangular grid of pixels. The resolution tells you how many there are.</p>\n<table class=\"bit-table\"><tr><th>Resolution</th><th>Total pixels</th><th>Common use</th></tr>\n<tr><td>4 × 4</td><td>16</td><td>Toy example</td></tr>\n<tr><td>64 × 64</td><td>4,096</td><td>Small icon</td></tr>\n<tr><td>640 × 480</td><td>307,200</td><td>Old webcam</td></tr>\n<tr><td>1920 × 1080</td><td>2,073,600</td><td>Full HD (1080p)</td></tr>\n<tr><td>3840 × 2160</td><td>8,294,400</td><td>4K Ultra HD</td></tr></table>\n<div class=\"two-col\">\n<div class=\"card\"><h4>More pixels = </h4><ul><li>More detail and sharpness</li><li>Larger file size</li><li>Slower to transmit</li></ul></div>\n<div class=\"card\"><h4>Fewer pixels = </h4><ul><li>Less detail, pixelated when zoomed</li><li>Smaller file size</li><li>Faster to load</li></ul></div>\n</div>"}, {"type": "concept", "title": "Colour Depth", "body": "<p>Colour depth is the number of <strong>bits per pixel</strong>. More bits = more possible colours:</p>\n<table class=\"bit-table\"><tr><th>Bits per pixel</th><th>Possible colours</th><th>Used for</th></tr>\n<tr><td>1</td><td>2¹ = 2</td><td>Black and white only</td></tr>\n<tr><td>4</td><td>2⁴ = 16</td><td>Simple icons</td></tr>\n<tr><td>8</td><td>2⁸ = 256</td><td>Old games, GIF images</td></tr>\n<tr><td>16</td><td>2¹⁶ = 65,536</td><td>Basic displays</td></tr>\n<tr><td>24</td><td>2²⁴ = 16,777,216</td><td>True colour (most photos)</td></tr>\n<tr><td>32</td><td>2³² = 4.3 billion</td><td>True colour + transparency</td></tr></table>\n<div class=\"callout\">💡 24-bit is called <strong>true colour</strong> because the human eye cannot distinguish between neighbouring shades at this depth.</div>"}, {"type": "concept", "title": "The File Size Formula", "body": "<p>To calculate the <strong>uncompressed</strong> size of a bitmap image:</p>\n<div class=\"callout\">📐 <strong>File size (bits) = Width × Height × Colour depth</strong><br><strong>File size (bytes) = bits ÷ 8</strong></div>\n<p><strong>Example 1:</strong> 100×100 pixels, 24-bit colour:</p>\n<pre>100 × 100 × 24 = 240,000 bits\n240,000 ÷ 8 = 30,000 bytes ≈ 29.3 KB</pre>\n<p><strong>Example 2:</strong> 1920×1080 pixels, 24-bit colour:</p>\n<pre>1920 × 1080 × 24 = 49,766,400 bits\n49,766,400 ÷ 8 = 6,220,800 bytes ≈ 5.93 MB</pre>\n<div class=\"callout warn\">⚠️ This is <em>uncompressed</em> size. JPEG and PNG compression can reduce this dramatically.</div>"}, {"type": "concept", "title": "Worked File Size Examples", "body": "<p>Practice with these step-by-step calculations:</p>\n<p><strong>Q: A 200×150 image at 8-bit colour. Size in bytes?</strong></p>\n<pre>200 × 150 × 8 = 240,000 bits\n240,000 ÷ 8 = 30,000 bytes</pre>\n<p><strong>Q: A 10×10 icon at 1-bit colour. Size in bytes?</strong></p>\n<pre>10 × 10 × 1 = 100 bits\n100 ÷ 8 = 12.5 bytes → round up to 13 bytes</pre>\n<p><strong>Q: How much bigger is 24-bit vs 8-bit for the same image?</strong></p>\n<pre>24-bit file ÷ 8-bit file = 24 ÷ 8 = 3× bigger</pre>\n<div class=\"callout\">💡 Doubling colour depth doubles file size. Doubling resolution <em>quadruples</em> file size (both width and height double).</div>"}, {"type": "concept", "title": "Metadata and Actual File Formats", "body": "<p>Real image files are slightly larger than the formula gives because they also store <strong>metadata</strong>:</p>\n<div class=\"two-col\">\n<div class=\"card\"><h4>Metadata</h4><ul><li>File format and version</li><li>Image width and height</li><li>Colour depth and colour space</li><li>Date taken, camera settings</li><li>GPS location (in photos)</li></ul></div>\n<div class=\"card\"><h4>Common image formats</h4><ul><li><strong>BMP</strong> — uncompressed, large files</li><li><strong>PNG</strong> — lossless compression, great for diagrams</li><li><strong>JPEG</strong> — lossy compression, great for photos</li><li><strong>GIF</strong> — max 256 colours, supports animation</li></ul></div>\n</div>\n<div class=\"callout\">🗜️ Compression reduces the file size but the formula still gives you the <strong>base uncompressed size</strong> to understand the cost of resolution and depth.</div>"}, {"type": "activity", "title": "Guided Tasks — Image File Size", "body": "<div class=\"task-box\"><h4>📝 Image calculations and concepts</h4><div class=\"answer-row\"><label>1. What is the file size in bits of a 10×10, 8-bit image?</label><input class=\"ans-input\" id=\"i1\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i1\" data-fb=\"fi1\" data-ans=\"800|800 bits\">Check</button><span class=\"fb\" id=\"fi1\"></span></div><div class=\"answer-row\"><label>2. Convert that to bytes:</label><input class=\"ans-input\" id=\"i2\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i2\" data-fb=\"fi2\" data-ans=\"100|100 bytes\">Check</button><span class=\"fb\" id=\"fi2\"></span></div><div class=\"answer-row\"><label>3. A 100×100, 24-bit image: size in bytes?</label><input class=\"ans-input\" id=\"i3\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i3\" data-fb=\"fi3\" data-ans=\"30000|30,000\">Check</button><span class=\"fb\" id=\"fi3\"></span></div><div class=\"answer-row\"><label>4. How many colours does 8-bit colour depth give?</label><input class=\"ans-input\" id=\"i4\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i4\" data-fb=\"fi4\" data-ans=\"256\">Check</button><span class=\"fb\" id=\"fi4\"></span></div><div class=\"answer-row\"><label>5. How many colours does 24-bit colour depth give?</label><input class=\"ans-input\" id=\"i5\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i5\" data-fb=\"fi5\" data-ans=\"16777216|16.7 million|16,777,216\">Check</button><span class=\"fb\" id=\"fi5\"></span></div><div class=\"answer-row\"><label>6. What is 'resolution' in an image?</label><input class=\"ans-input\" id=\"i6\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i6\" data-fb=\"fi6\" data-ans=\"number of pixels|width times height|pixel count|width x height\">Check</button><span class=\"fb\" id=\"fi6\"></span></div><div class=\"answer-row\"><label>7. Name one lossless image format:</label><input class=\"ans-input\" id=\"i7\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i7\" data-fb=\"fi7\" data-ans=\"PNG|BMP|TIFF|png|bmp\">Check</button><span class=\"fb\" id=\"fi7\"></span></div><div class=\"answer-row\"><label>8. Name one lossy image format:</label><input class=\"ans-input\" id=\"i8\" placeholder=\"...\"><button class=\"check-btn\" data-inp=\"i8\" data-fb=\"fi8\" data-ans=\"JPEG|JPG|jpeg|jpg\">Check</button><span class=\"fb\" id=\"fi8\"></span></div></div>"}, {"type": "summary", "title": "Lesson 4 Summary", "body": "<ul>\n<li>A digital image is a grid of <strong>pixels</strong> — each pixel stores a colour value in binary</li>\n<li><strong>Resolution</strong> = width × height in pixels. More pixels = more detail, bigger file</li>\n<li><strong>Colour depth</strong> = bits per pixel. 8-bit = 256 colours; 24-bit = 16.7 million colours</li>\n<li><strong>File size (bits)</strong> = Width × Height × Colour depth</li>\n<li><strong>File size (bytes)</strong> = bits ÷ 8</li>\n<li>Increasing resolution quadruples file size; doubling colour depth doubles it</li>\n<li>PNG (lossless) vs JPEG (lossy) — tradeoff between quality and size</li>\n</ul>\n<div class=\"callout success\">✅ Next lesson: sound representation and sampling.</div>"}, {"type": "compete", "title": "🏆 Image Representation Speed Challenge", "body": "<div class=\"compete-board\">\n<h4>🏆 Image Representation Speed Challenge</h4>\n<div id=\"comp-start\">\n  <p style=\"font-size:13px;color:var(--muted);margin-bottom:10px\">15 seconds per question — faster answers score more!</p>\n  <input class=\"compete-input\" id=\"comp-name\" placeholder=\"Your name...\">\n  <button class=\"compete-btn\" onclick=\"startComp()\">🚀 Start Challenge!</button>\n  <ul class=\"leaderboard\" id=\"comp-lb\" style=\"margin-top:12px\"></ul>\n</div>\n<div id=\"comp-game\" style=\"display:none\">\n  <div style=\"display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px\">\n    <span id=\"comp-qn\">Q1</span><span id=\"comp-tl\" style=\"color:var(--warning)\">15s</span>\n  </div>\n  <div class=\"timer-bar\"><div class=\"timer-fill\" id=\"comp-fill\" style=\"width:100%\"></div></div>\n  <div class=\"compete-q\" id=\"comp-q\"></div>\n  <input class=\"compete-input\" id=\"comp-ans\" placeholder=\"Answer...\" autocomplete=\"off\">\n  <button class=\"compete-btn\" onclick=\"submitAns()\">Submit ↵</button>\n  <div style=\"display:flex;justify-content:space-between;margin-top:8px\">\n    <span style=\"font-size:13px;color:var(--muted)\">Score: <strong id=\"comp-score\" style=\"color:var(--warning);font-family:var(--mono)\">0</strong></span>\n    <span class=\"fb\" id=\"comp-fb\"></span>\n  </div>\n</div>\n<div id=\"comp-end\" style=\"display:none;text-align:center\">\n  <div style=\"font-size:36px;margin-bottom:8px\">🎉</div>\n  <p style=\"font-size:17px;font-weight:700\">Well done, <span id=\"comp-final-name\"></span>!</p>\n  <div class=\"score-display\" id=\"comp-final-score\">0</div>\n  <button class=\"compete-btn\" onclick=\"resetComp()\" style=\"margin-top:8px\">🔄 Play Again</button>\n  <ul class=\"leaderboard\" id=\"comp-lb-end\" style=\"margin-top:12px;text-align:left\"></ul>\n</div>\n</div>"}];
+const COMP_Qs = [{"q": "What is a pixel?", "answers": ["picture element", "single point of colour", "smallest unit in an image"]}, {"q": "File size formula: W × H × ___ ÷ 8 = bytes", "answers": ["colour depth", "color depth", "bit depth"]}, {"q": "10×10 image, 8-bit colour. Size in bits?", "answers": ["800"]}, {"q": "10×10 image, 8-bit colour. Size in bytes?", "answers": ["100"]}, {"q": "How many colours in 8-bit?", "answers": ["256"]}, {"q": "How many colours in 24-bit?", "answers": ["16777216", "16.7 million"]}, {"q": "Name a lossless image format", "answers": ["PNG", "BMP", "TIFF", "png"]}, {"q": "Name a lossy image format", "answers": ["JPEG", "JPG", "jpeg"]}, {"q": "What is resolution?", "answers": ["width times height", "number of pixels", "pixel count"]}, {"q": "Doubling resolution changes file size by?", "answers": ["4 times", "quadruples", "x4"]}];
+
+function attachCheckListeners(){
+  document.querySelectorAll('.check-btn[data-inp]').forEach(function(btn){
+    if(btn._wired)return; btn._wired=true;
+    btn.addEventListener('click',function(){
+      schkAny(this.getAttribute('data-inp'),this.getAttribute('data-fb'),this.getAttribute('data-ans').split('|'));
+    });
+  });
+}
+function schkAny(iid,fid,answers){
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var val=clean(document.getElementById(iid).value.trim());
+  var ok=answers.map(clean).indexOf(val)>-1;
+  var fb=document.getElementById(fid);
+  fb.className='fb '+(ok?'ok':'no');
+  fb.textContent=ok?'✓ Correct!':'✗ Try again — '+answers[0];
+}
+function schk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chk(iid,fid,correct){schkAny(iid,fid,[correct]);}
+function chkAny(iid,fid,answers){schkAny(iid,fid,answers);}
+
+var cur=0;
+function render(){
+  var s=SLIDES[cur];
+  var tl=s.type==='compete'?'Competition':s.type.charAt(0).toUpperCase()+s.type.slice(1);
+  document.getElementById('slide').innerHTML=
+    '<div class="eyebrow"><span class="stype t-'+s.type+'">'+tl+'</span>'+
+    '<span class="snum">Slide '+(cur+1)+' of '+SLIDES.length+'</span></div>'+
+    '<h1>'+s.title+'</h1><div class="sb">'+s.body+'</div>';
+  document.getElementById('prog').style.width=((cur+1)/SLIDES.length*100)+'%';
+  document.getElementById('sctr').textContent=(cur+1)+' / '+SLIDES.length;
+  document.getElementById('prev-btn').disabled=cur===0;
+  document.getElementById('next-btn').disabled=cur===SLIDES.length-1;
+  var dh='';
+  SLIDES.forEach(function(sl,i){
+    dh+='<div class="pdot'+(sl.type==='compete'?' cdot':'')+(i===cur?' active':i<cur?' done':'')+'" onclick="goTo('+i+')" title="'+sl.title.replace(/"/g,"'")+'"></div>';
+  });
+  document.getElementById('dots').innerHTML=dh;
+  if(s.type==='compete'){
+    var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+    var el=document.getElementById('comp-lb');
+    if(el)renderLB(el,lb);
+  }
+  attachCheckListeners();
+}
+function goNext(){if(cur<SLIDES.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function goTo(i){cur=i;render();}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goNext();}
+  if(e.key==='ArrowLeft'){e.preventDefault();goPrev();}
+});
+
+/* Speed challenge */
+var cqs=[],cIdx=0,cScore=0,cName='',cTimer=null,cRunning=false;
+function startComp(){
+  cName=document.getElementById('comp-name').value.trim()||'Anonymous';
+  cScore=0;cIdx=0;cRunning=true;
+  cqs=[].concat(COMP_Qs).sort(function(){return Math.random()-.5;});
+  document.getElementById('comp-start').style.display='none';
+  document.getElementById('comp-game').style.display='block';
+  nextQ();
+}
+function nextQ(){
+  if(cIdx>=cqs.length){endComp();return;}
+  var q=cqs[cIdx];
+  document.getElementById('comp-q').textContent=q.q;
+  document.getElementById('comp-qn').textContent='Q'+(cIdx+1)+'/'+cqs.length;
+  document.getElementById('comp-ans').value='';
+  document.getElementById('comp-fb').className='fb';
+  document.getElementById('comp-ans').focus();
+  var t=15,fill=document.getElementById('comp-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';fill.style.width='0%';},50);
+  clearInterval(cTimer);
+  cTimer=setInterval(function(){t--;document.getElementById('comp-tl').textContent=t+'s';if(t<=0){clearInterval(cTimer);autoNext();}},1000);
+}
+function autoNext(){
+  if(!cRunning)return;
+  var fb=document.getElementById('comp-fb');
+  fb.className='fb no';fb.textContent='⏱ Time! Ans: '+cqs[cIdx].answers[0];
+  cIdx++;setTimeout(nextQ,1200);
+}
+function submitAns(){
+  if(!cRunning)return;
+  clearInterval(cTimer);
+  var clean=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');};
+  var ans=clean(document.getElementById('comp-ans').value.trim());
+  var q=cqs[cIdx],ok=q.answers.map(clean).indexOf(ans)>-1;
+  var pct=parseFloat(document.getElementById('comp-fill').style.width)||0;
+  var pts=ok?Math.ceil(pct/10)+10:0;
+  var fb=document.getElementById('comp-fb');
+  if(ok){cScore+=pts;document.getElementById('comp-score').textContent=cScore;fb.className='fb ok';fb.textContent='✓ +'+pts+' pts!';}
+  else{fb.className='fb no';fb.textContent='✗ Ans: '+q.answers[0];}
+  cIdx++;setTimeout(nextQ,1000);
+}
+document.addEventListener('keydown',function(e){
+  var el=document.getElementById('comp-ans');
+  if(e.key==='Enter'&&cRunning&&el&&document.activeElement===el)submitAns();
+});
+function endComp(){
+  cRunning=false;
+  document.getElementById('comp-game').style.display='none';
+  document.getElementById('comp-end').style.display='block';
+  document.getElementById('comp-final-name').textContent=cName;
+  document.getElementById('comp-final-score').textContent=cScore;
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  lb.push({name:cName,score:cScore,ts:Date.now()});
+  lb.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem('tp_lb_'+LESSON_ID,JSON.stringify(lb.slice(0,10)));
+  renderLB(document.getElementById('comp-lb-end'),lb);
+}
+function resetComp(){
+  document.getElementById('comp-end').style.display='none';
+  document.getElementById('comp-start').style.display='block';
+  var lb=JSON.parse(localStorage.getItem('tp_lb_'+LESSON_ID)||'[]');
+  renderLB(document.getElementById('comp-lb'),lb);
+}
+function renderLB(el,lb){
+  if(!el)return;
+  el.innerHTML=lb.slice(0,10).map(function(e,i){
+    return '<li><span class="lb-pos">'+(i+1)+'</span><span class="lb-name">'+e.name+'</span><span class="lb-score">'+e.score+' pts</span></li>';
+  }).join('');
+}
+render();
+
+</script>
+</body>
+</html>
